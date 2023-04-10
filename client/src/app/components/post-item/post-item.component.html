@@ -1,0 +1,54 @@
+<div class="goal">
+  <div class="goal-date">
+    {{ post.createdAt }}
+  </div>
+  <h2 class="goal-text">{{ post.title }}</h2>
+  <small className="goal-text">{{ post.content }}</small>
+  <button class="close" (click)="deletePost(post.id)">
+    <ng-container *ngIf="user$ | async as user">
+      <fa-icon
+        *ngIf="user.id === post.authorId"
+        style="font-size: 1.6rem; color: #ff4646"
+        [icon]="faClose"
+      ></fa-icon>
+    </ng-container>
+  </button>
+  <div class="line-through"></div>
+  <div class="comment-block flex_col_center gap_102">
+    <!-- <div className="comment-icon-box">
+      <TfiComments className="icon" onClick={handeCommentOpen} />
+    </div> -->
+    <!-- <div
+      className={`${
+        isCommentOpen ? "comment-box active" : "comment-box"
+      }`}>
+      <ul>
+        {comments.map((element: any) => {
+          if (element.postId === post.id)
+            return (
+              <li className="comment-lists" key={element.id}>
+                {element.comment}
+              </li>
+            );
+        })}
+      </ul>
+      <form
+        action=""
+        className="flex_row_end form-box"
+        onSubmit={handleCommentSubmit}>
+        <input
+          type="text"
+          name="comment"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          required
+          placeholder="add comment"
+          className="comment-input"
+        />
+        <button className="comment-btn " type="submit">
+          Add
+        </button>
+      </form>
+    </div> -->
+  </div>
+</div>

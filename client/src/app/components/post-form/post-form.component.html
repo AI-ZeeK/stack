@@ -1,0 +1,15 @@
+<section class="form">
+  <form action="" (ngSubmit)="handleCreatePost()">
+    <div class="form-group">
+      <label foror="text">Twit Title</label>
+      <input type="text" name="text" id="text" [(ngModel)]="title" required />
+    </div>
+    <div class="form-group">
+      <label htmlFor="text">Twit Content</label>
+      <input type="text" name="text" id="text" [(ngModel)]="content" required />
+    </div>
+    <div class="form-group">
+      <button class="btn btn-block" type="submit">Add Twit</button>
+    </div>
+  </form>
+</section>

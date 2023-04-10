@@ -1,0 +1,25 @@
+<header class="header">
+  <div class="logo flex_row_center">
+    <!-- <Link to="/"></Link> -->
+    <a routerLink="/">Assessment Posts</a>
+  </div>
+  <ul class="flex_row_center">
+    <div *ngIf="user; then isLogin; else isLogout"></div>
+    <ng-template #isLogin
+      ><li>
+        <button class="btn" (click)="logout()">
+          <fa-icon [icon]="faArrowRightFromBracket"></fa-icon>
+          Logout
+        </button>
+      </li></ng-template
+    >
+    <ng-template #isLogout
+      ><li class="flex_row_center">
+        <a routerLink="/login">
+          <fa-icon [icon]="faArrowRightToBracket"></fa-icon>
+          Login
+        </a>
+      </li></ng-template
+    >
+  </ul>
+</header>

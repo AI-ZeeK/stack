@@ -1,0 +1,48 @@
+$breakpoints: (
+  "xs": 0,
+  "xsm": 300px,
+  "sm": 540px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1366px,
+);
+
+@mixin extrasmall-screen {
+  @media screen and (max-width: map-get($breakpoints, "xsm")) {
+    @content;
+  }
+}
+@mixin small-screen {
+  @media screen and (max-width: map-get($breakpoints, "sm")) {
+    @content;
+  }
+}
+
+@mixin medium-screen {
+  @media (min-width: map-get($breakpoints, "sm")) and (max-width: map-get($breakpoints, "md")) {
+    @content;
+  }
+}
+
+@mixin medium-h-screen {
+  @media screen and (max-height: map-get($breakpoints, "md")) {
+    @content;
+  }
+}
+
+@mixin large-screen {
+  @media (min-width: map-get($breakpoints, "md")) and (max-width: map-get($breakpoints, "lg")) {
+    @content;
+  }
+}
+
+@mixin huge-screen {
+  @media screen and (min-width: map-get($breakpoints, "lg")) {
+    @content;
+  }
+}
+@mixin wide-screen {
+  @media screen and (min-width: map-get($breakpoints, "xl")) {
+    @content;
+  }
+}

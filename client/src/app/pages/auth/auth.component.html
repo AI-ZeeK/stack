@@ -1,0 +1,42 @@
+<app-header></app-header>
+<div class="container">
+  <section class="heading">
+    <h1>
+      <!-- <FaUserAlt />  -->
+      <fa-icon [icon]="faUserAlt"></fa-icon>
+      Login
+    </h1>
+    <p>Start making posts</p>
+  </section>
+
+  <section class="form">
+    <form action="" (ngSubmit)="submitAuthForm()">
+      <div class="form-group">
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          placeholder="Enter your email"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          placeholder="Enter your password"
+        />
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-block">Submit</button>
+      </div>
+    </form>
+  </section>
+</div>
