@@ -71,6 +71,7 @@ export class CommentController {
     @Param('id') id: string,
     @Body() comment: commentDTO,
   ): Promise<CommentsModel> {
+    console.log(comment, id);
     return await this.commentService.updateComment(
       { id },
       { comment: comment.comment },

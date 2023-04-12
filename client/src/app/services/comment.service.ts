@@ -56,10 +56,10 @@ export class CommentService {
         Authorization: `Bearer ${user.token}`,
       }),
     };
-    console.log(payload);
-    return this.http.patch<Comments>(
+    console.log(payload, 'upda');
+    return this.http.patch(
       `${this.apiUrl}/${payload.id}`,
-      payload.comment,
+      { comment: payload.comment },
       httpOptions
     );
   }

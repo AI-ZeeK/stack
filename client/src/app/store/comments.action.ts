@@ -106,6 +106,9 @@ export class CommentState {
   ): Observable<Comments> {
     const state = ctx.getState();
     ctx.patchState({
+      comments: state.comments.filter((element) => {
+        element.id !== payload.id;
+      }),
       commentState: {
         isError: false,
         isLoading: true,
@@ -116,11 +119,9 @@ export class CommentState {
       tap(
         (comment: Comments) => {
           console.log(comment);
-
+          const state = ctx.getState();
           ctx.patchState({
-            comments: state.comments.filter((element) => {
-              element.id === comment.id ? comment : element;
-            }),
+            comments: [...state.comments, comment],
             commentState: {
               isError: false,
               isLoading: false,
