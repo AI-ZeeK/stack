@@ -105,10 +105,9 @@ export class CommentState {
     { payload }: any
   ): Observable<Comments> {
     const state = ctx.getState();
+    console.log(state);
     ctx.patchState({
-      comments: state.comments.filter((element) => {
-        element.id !== payload.id;
-      }),
+      comments: state.comments.filter((element) => element.id !== payload.id),
       commentState: {
         isError: false,
         isLoading: true,
@@ -118,8 +117,8 @@ export class CommentState {
     return this.commentService.updateComment(payload).pipe(
       tap(
         (comment: Comments) => {
-          console.log(comment);
           const state = ctx.getState();
+          console.log(comment, state);
           ctx.patchState({
             comments: [...state.comments, comment],
             commentState: {
