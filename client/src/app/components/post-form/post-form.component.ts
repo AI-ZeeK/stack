@@ -11,9 +11,10 @@ export class PostFormComponent {
   title!: string;
   content!: string;
   constructor(private store: Store) {}
+
   handleCreatePost() {
     let data: User = JSON.parse(`${this.getData('access-token')}`);
-
+    if (this.title === '' && this.content === '') return;
     console.log(this.title, this.content);
     this.store.dispatch(
       new CreatePost({

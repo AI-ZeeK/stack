@@ -1,24 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { User, Post } from '../store/auth.actions';
-const user: User = JSON.parse(localStorage.getItem('access-token') as string);
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${user.token}`,
-  }),
-};
-const httpOptionsf = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-  }),
-};
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
+  // user: User = JSON.parse(`${this.getData('access-token')}`);
+
   private apiUrl = 'http://localhost:8000/post';
   constructor(private http: HttpClient) {}
   getTwits(): Observable<any> {
@@ -26,11 +16,27 @@ export class PostService {
   }
 
   createPost(post: Post): Observable<any> {
-    console.log(post, httpOptions, typeof httpOptions);
+    const user: User = JSON.parse(`${this.getData('access-token')}`);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
+      }),
+    };
     return this.http.post<Post>(this.apiUrl, post, httpOptions);
   }
   deletePost(postId: string): Observable<any> {
-    console.log(user.token);
+    const user: User = JSON.parse(`${this.getData('access-token')}`);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
+      }),
+    };
     return this.http.delete(`${this.apiUrl}/${postId}`, httpOptions);
+  }
+
+  public getData(key: string) {
+    return localStorage.getItem(key);
   }
 }

@@ -34,9 +34,9 @@ export class HeaderComponent {
     // this.user && this.store.dispatch(new SetUsers(data));
   }
   ngOnInit() {
-    let data = this.getData('access-token');
+    let data: User = JSON.parse(`${this.getData('access-token')}`);
     this.user = data === null ? false : true;
-
+    this.user && this.store.dispatch(new SetUsers(data));
     // console.log(this.name);
     this.user && this.router.navigate(['']);
     !this.user && this.router.navigate(['login']);

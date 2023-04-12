@@ -16,6 +16,8 @@ import { CounterState } from './store/store.actions';
 import { AuthState } from './store/auth.actions';
 import { AuthService } from './services/auth.service';
 import { PostService } from './services/post.service';
+import { CommentBoxComponent } from './components/comment-box/comment-box.component';
+import { CommentState } from './store/comments.action';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ import { PostService } from './services/post.service';
     PostItemComponent,
     HeaderComponent,
     PostFormComponent,
+    CommentBoxComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,10 +35,10 @@ import { PostService } from './services/post.service';
     FontAwesomeModule,
     FormsModule,
     HttpClientModule,
-    NgxsModule.forRoot([CounterState, AuthState]),
+    NgxsModule.forRoot([CounterState, AuthState, CommentState]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
   ],
-  providers: [AuthService, PostService],
+  providers: [AuthService, PostService, CommentState],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

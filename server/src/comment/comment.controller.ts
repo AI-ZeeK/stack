@@ -5,8 +5,10 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
   UseGuards,
   Request,
+  Param,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { commentDTO } from './dto/comment.dto';
@@ -42,5 +44,22 @@ export class CommentController {
       commentorId: req.user.id,
       postId: comment.postId,
     });
+  }
+  @UseGuards(UserGuard)
+  @Delete('post/:postId')
+  async deletePostComment(@Param('postId') postId: string): Promise<object> {
+    const allComments = await this.getAllComments();
+    allComments.map((element) => {
+      element.postId === postId
+        ? this.commentService.deleteComment({ id: element?.id })
+        : null;
+    });
+    return { message: 'Deleted' };
+  }
+  @UseGuards(UserGuard)
+  @Delete(':id')
+  async deleteComment(@Param('id') id: string): Promise<object> {
+    await this.commentService.deleteComment({ id });
+    return { message: 'Deleted' };
   }
 }

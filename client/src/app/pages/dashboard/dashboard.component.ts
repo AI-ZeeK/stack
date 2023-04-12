@@ -3,8 +3,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { PostService } from 'src/app/services/post.service';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { AuthState, GetPosts, Post, User } from 'src/app/store/auth.actions';
+import { Observable, tap } from 'rxjs';
+import {
+  AuthState,
+  GetPosts,
+  Post,
+  QueryState,
+  User,
+  GetUser,
+  GetUsers,
+} from 'src/app/store/auth.actions';
+import { GetComments } from 'src/app/store/comments.action';
 
 export interface postType {
   id: string;
@@ -19,8 +28,6 @@ export interface postType {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
-  poosts: Post[] = [];
-  // user = false;
   name!: string;
   userData: User = {
     id: '',
@@ -33,6 +40,9 @@ export class DashboardComponent {
   post = this.store.select((state) => state.users.posts);
   @Select(AuthState.getUser) user$!: Observable<User>;
   @Select(AuthState.getPosts) posts$!: Observable<Post[]>;
+  @Select(AuthState.getPostsState) postsState$!: Observable<QueryState>;
+  @Select(AuthState.getPostAuthors) PostAuthors$!: Observable<User>;
+  postAuthorId!: string | undefined;
   // posts!: Post[];
   constructor(
     private router: Router,
@@ -40,12 +50,10 @@ export class DashboardComponent {
     private postData: PostService,
     private store: Store
   ) {}
-  ngOnInit() {
-    this.store.dispatch(new GetPosts()).subscribe((posts) => {
-      console.log(posts);
-      this.poosts = posts.users.posts;
-      console.log(this.poosts, posts);
-    });
+  async ngOnInit() {
+    this.store.dispatch(new GetPosts());
+    this.store.dispatch(new GetUsers());
+    this.store.dispatch(new GetComments());
   }
   ngDoCheck() {
     let data: User = JSON.parse(`${this.getData('access-token')}`);

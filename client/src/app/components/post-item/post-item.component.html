@@ -1,54 +1,104 @@
-<div class="goal">
-  <div class="goal-date">
-    {{ post.createdAt }}
-  </div>
-  <h2 class="goal-text">{{ post.title }}</h2>
-  <small className="goal-text">{{ post.content }}</small>
-  <button class="close" (click)="deletePost(post.id)">
-    <ng-container *ngIf="user$ | async as user">
-      <fa-icon
-        *ngIf="user.id === post.authorId"
-        style="font-size: 1.6rem; color: #ff4646"
-        [icon]="faClose"
-      ></fa-icon>
+<ng-container *ngIf="PostAuthors$ | async as PostAuthors">
+  <div class="goal">
+    <div class="goal-date">
+      {{ post.createdAt | date : "dd/MM/yyyy hh:mm:ss a" }}
+    </div>
+    <ng-container *ngFor="let PostAuthor of PostAuthors">
+      <h2
+        *ngIf="PostAuthor.id == post.authorId"
+        class="goal-text"
+        style="text-transform: uppercase"
+      >
+        {{ PostAuthor.name }}
+      </h2>
     </ng-container>
-  </button>
-  <div class="line-through"></div>
-  <div class="comment-block flex_col_center gap_102">
-    <!-- <div className="comment-icon-box">
-      <TfiComments className="icon" onClick={handeCommentOpen} />
-    </div> -->
-    <!-- <div
+    <h2 class="goal-text">{{ post.title }}</h2>
+    <small class="goal-text">{{ post.content }}</small>
+    <button class="close" (click)="deletePost(post.id)">
+      <ng-container *ngIf="user$ | async as user">
+        <fa-icon
+          *ngIf="user.id === post.authorId"
+          style="font-size: 1.6rem; color: #ff4646"
+          [icon]="faClose"
+        ></fa-icon>
+      </ng-container>
+    </button>
+    <div class="line-through"></div>
+    <div class="comment-block flex_col_center gap_102">
+      <div class="comment-icon-box">
+        <!-- <TfiComments className="icon" onClick={handeCommentOpen} /> -->
+        <fa-icon
+          class="icon"
+          style="font-size: 1.6rem"
+          [icon]="faComments"
+          (click)="handleOpenCommentBox()"
+        ></fa-icon>
+      </div>
+      <!-- <div
       className={`${
         isCommentOpen ? "comment-box active" : "comment-box"
-      }`}>
-      <ul>
-        {comments.map((element: any) => {
+      }`} -->
+      <div
+        [ngClass]="{
+          'comment-box active': isCommentBoxOpen,
+          'comment-box': !isCommentBoxOpen
+        }"
+      >
+        <ul>
+          <ng-container *ngIf="comments$ | async as comments">
+            <ng-container *ngFor="let comment of comments">
+              <li *ngIf="comment.postId === post.id" class="comment-lists">
+                <span class="comment-text"> {{ comment.comment }} </span>
+                <div class="comment-icon-box">
+                  <ng-container *ngIf="user$ | async as user">
+                    <fa-icon
+                      class="icon edit"
+                      style="font-size: 1rem"
+                      [icon]="faEdit"
+                      *ngIf="user.id === comment.commentorId"
+                    ></fa-icon>
+                  </ng-container>
+                  <ng-container *ngIf="user$ | async as user">
+                    <fa-icon
+                      class="icon delete"
+                      style="font-size: 1rem"
+                      [icon]="faDeleteLeft"
+                      (dblclick)="deleteComment(comment.id)"
+                      *ngIf="
+                        user.id === post.authorId ||
+                        user.id === comment.commentorId
+                      "
+                    ></fa-icon>
+                  </ng-container>
+                </div>
+              </li>
+            </ng-container>
+          </ng-container>
+          <!-- {comments.map((element: any) => {
           if (element.postId === post.id)
             return (
               <li className="comment-lists" key={element.id}>
                 {element.comment}
               </li>
             );
-        })}
-      </ul>
-      <form
-        action=""
-        className="flex_row_end form-box"
-        onSubmit={handleCommentSubmit}>
-        <input
-          type="text"
-          name="comment"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          required
-          placeholder="add comment"
-          className="comment-input"
-        />
-        <button className="comment-btn " type="submit">
-          Add
-        </button>
-      </form>
-    </div> -->
+        })} -->
+        </ul>
+        <form
+          action=""
+          class="flex_row_end form-box"
+          (submit)="handleCommentSubmit(post.id)"
+        >
+          <input
+            type="text"
+            name="comment"
+            required
+            [(ngModel)]="comment"
+            placeholder="add comment"
+            class="comment-input"
+          />
+          <button class="comment-btn" type="submit">Add</button>
+        </form>
+      </div>
+    </div>
   </div>
-</div>
+</ng-container>

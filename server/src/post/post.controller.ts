@@ -48,7 +48,7 @@ export class PostController {
   async deletePost(
     @Param('id') id: string,
     @Request() req: any,
-  ): Promise<string> {
+  ): Promise<object> {
     const post = await this.getPost(id);
 
     if (!post)
@@ -60,6 +60,6 @@ export class PostController {
         HttpStatus.FORBIDDEN,
       );
     await this.postService.deletePost({ id });
-    return 'Deleted';
+    return { message: 'Deleted' };
   }
 }

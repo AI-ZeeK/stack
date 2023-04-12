@@ -17,4 +17,11 @@ export class CommentService {
       data,
     });
   }
+  async deleteComment(
+    where: Prisma.CommentsWhereUniqueInput,
+  ): Promise<Comments> {
+    return this.prisma.comments.delete({
+      where,
+    });
+  }
 }

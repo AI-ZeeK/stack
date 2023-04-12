@@ -6,28 +6,14 @@ import { PostService } from '../services/post.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-// export class User {
-//   id!: string;
-//   name!: string;
-//   email!: string;
-//   token!: string;
-//   createdAt!: string;
-// }
 export interface User {
   id?: string;
   name: string;
   email: string;
   password: string;
-  token?: string;
+  token: string;
   createdAt?: string;
 }
-// export class Post {
-//   id!: string;
-//   authorId!: string;
-//   content!: string;
-//   title!: string;
-//   createdAt!: string;
-// }
 export interface Post {
   id?: string;
   authorId: string | undefined;
@@ -35,7 +21,7 @@ export interface Post {
   title: string;
   createdAt?: string;
 }
-class QueryState {
+export class QueryState {
   isLoading!: boolean;
   isError!: boolean;
   isSuccess!: boolean;
@@ -43,7 +29,9 @@ class QueryState {
 class AppInitial {
   user!: User | null;
   posts!: Post[];
+  postAuthors!: User[];
   userState!: QueryState;
+  postsState!: QueryState;
 }
 
 export class SignInUser {
@@ -54,6 +42,13 @@ export class SignInUser {
 export class SetUsers {
   static readonly type = '[User] Set Users';
   constructor(public payload: User) {}
+}
+export class GetUser {
+  static readonly type = '[User] Get User';
+  constructor(public payload: string | undefined) {}
+}
+export class GetUsers {
+  static readonly type = '[User] Get Users';
 }
 export class GetPosts {
   static readonly type = '[Post] Get Posts';
@@ -71,8 +66,14 @@ export class CreatePost {
   name: 'users',
   defaults: {
     user: null,
+    postAuthors: [],
     posts: [],
     userState: {
+      isLoading: false,
+      isSuccess: false,
+      isError: false,
+    },
+    postsState: {
       isLoading: false,
       isSuccess: false,
       isError: false,
@@ -97,15 +98,56 @@ export class AuthState {
     return state.posts;
   }
   @Selector()
+  static getPostAuthors(state: AppInitial): User[] {
+    return state.postAuthors;
+  }
+  @Selector()
   static getUser(state: any) {
     return state.user;
   }
+  @Selector()
+  static getUserState(state: any) {
+    return state.userState;
+  }
+  @Selector()
+  static getPostsState(state: any) {
+    return state.postsState;
+  }
   @Action(SignInUser)
-  signInUser(ctx: StateContext<User>, { payload }: any): Observable<User> {
+  signInUser(
+    ctx: StateContext<AppInitial>,
+    { payload }: any
+  ): Observable<User> {
     return this.authService.signInUser(payload).pipe(
       tap((user: User) => {
         ctx.dispatch(new SetUsers(user));
         user && this.router.navigate(['']);
+      })
+    );
+  }
+  // @Action(GetUser)
+  // getPostAuthor(
+  //   ctx: StateContext<AppInitial>,
+  //   { payload }: any
+  // ): Observable<User> {
+  //   return this.authService.getUser(payload).pipe(
+  //     tap((postAuthor: User) => {
+  //       ctx.patchState({
+  //         postAuthor,
+  //       });
+  //     })
+  //   );
+  // }
+  @Action(GetUsers)
+  getPostAuthors(
+    ctx: StateContext<AppInitial>,
+    { payload }: any
+  ): Observable<User[]> {
+    return this.authService.getUsers().pipe(
+      tap((postAuthors: User[]) => {
+        ctx.patchState({
+          postAuthors,
+        });
       })
     );
   }
@@ -118,16 +160,44 @@ export class AuthState {
       user: payload,
     });
     this.saveData('access-token', data);
+    setTimeout(() => {
+      localStorage.removeItem('access-token');
+      this.router.navigate(['login']);
+    }, 21600000);
   }
   @Action(GetPosts)
   getPosts(ctx: StateContext<AppInitial>): Observable<Post[]> {
+    let state = ctx.getState();
+    ctx.patchState({
+      postsState: {
+        isError: false,
+        isLoading: true,
+        isSuccess: false,
+      },
+    });
     return this.postService.getTwits().pipe(
-      tap((posts: Post[]) => {
-        ctx.patchState({
-          posts,
-        });
-        console.log(posts);
-      })
+      tap(
+        (posts: Post[]) => {
+          ctx.patchState({
+            posts,
+            postsState: {
+              isError: false,
+              isLoading: false,
+              isSuccess: true,
+            },
+          });
+          console.log(posts);
+        },
+        (error) => {
+          ctx.patchState({
+            postsState: {
+              isError: true,
+              isLoading: false,
+              isSuccess: false,
+            },
+          });
+        }
+      )
     );
   }
   @Action(CreatePost)
@@ -146,19 +216,16 @@ export class AuthState {
   }
 
   @Action(DeletePost)
-  deletePost(
-    ctx: StateContext<AppInitial>,
-    { payload }: any
-  ): Observable<Post> {
+  deletePost(ctx: StateContext<AppInitial>, { payload }: any) {
     const state = ctx.getState();
-    console.log(state.posts, 12);
     ctx.patchState({
       posts: state.posts.filter((element) => {
         return element.id !== payload;
       }),
     });
-    console.log(state.posts, 24);
-    return this.postService.deletePost(payload);
+    this.postService.deletePost(payload).subscribe((value) => {
+      console.log(value);
+    });
   }
 
   public saveData(key: string, value: string) {
