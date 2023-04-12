@@ -23,6 +23,9 @@ export class PostFormComponent {
         authorId: data.id,
       })
     );
+
+    this.title = '';
+    this.content = '';
   }
 
   public getData(key: string) {

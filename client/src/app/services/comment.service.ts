@@ -48,6 +48,21 @@ export class CommentService {
   getComment(): Observable<any[]> {
     return this.http.get<Comments[]>(this.apiUrl);
   }
+  updateComment(payload: any): Observable<any> {
+    const user: User = JSON.parse(`${this.getData('access-token')}`);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
+      }),
+    };
+    console.log(payload);
+    return this.http.patch<Comments>(
+      `${this.apiUrl}/${payload.id}`,
+      payload.comment,
+      httpOptions
+    );
+  }
 
   public getData(key: string) {
     return localStorage.getItem(key);

@@ -24,4 +24,13 @@ export class CommentService {
       where,
     });
   }
+  async updateComment(
+    where: Prisma.CommentsWhereUniqueInput,
+    data: Prisma.CommentsUncheckedCreateInput,
+  ): Promise<Comments> {
+    return this.prisma.comments.update({
+      where,
+      data,
+    });
+  }
 }

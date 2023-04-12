@@ -56,6 +56,7 @@
                       style="font-size: 1rem"
                       [icon]="faEdit"
                       *ngIf="user.id === comment.commentorId"
+                      (click)="handleEdit(comment)"
                     ></fa-icon>
                   </ng-container>
                   <ng-container *ngIf="user$ | async as user">
@@ -96,7 +97,8 @@
             placeholder="add comment"
             class="comment-input"
           />
-          <button class="comment-btn" type="submit">Add</button>
+          <button class="comment-btn" type="submit" *ngIf="!isEdit">Add</button>
+          <button class="comment-btn" type="submit" *ngIf="isEdit">Edit</button>
         </form>
       </div>
     </div>

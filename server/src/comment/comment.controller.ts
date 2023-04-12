@@ -6,6 +6,7 @@ import {
   Get,
   Post,
   Delete,
+  Patch,
   UseGuards,
   Request,
   Param,
@@ -59,7 +60,20 @@ export class CommentController {
   @UseGuards(UserGuard)
   @Delete(':id')
   async deleteComment(@Param('id') id: string): Promise<object> {
-    await this.commentService.deleteComment({ id });
+    const data = await this.commentService.deleteComment({ id });
+    if (!data)
+      throw new HttpException('No post to delete', HttpStatus.BAD_REQUEST);
     return { message: 'Deleted' };
+  }
+  @UseGuards(UserGuard)
+  @Patch(':id')
+  async updateComment(
+    @Param('id') id: string,
+    @Body() comment: commentDTO,
+  ): Promise<CommentsModel> {
+    return await this.commentService.updateComment(
+      { id },
+      { comment: comment.comment },
+    );
   }
 }

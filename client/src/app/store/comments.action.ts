@@ -20,6 +20,10 @@ export class CreateComment {
   static readonly type = '[Comment] Create Comment';
   constructor(public payload: Comments) {}
 }
+export class UpdateComment {
+  static readonly type = '[Comment] Update Comment';
+  constructor(public payload: object) {}
+}
 export class GetComments {
   static readonly type = '[Comment] Get Comments';
 }
@@ -94,6 +98,49 @@ export class CommentState {
       )
     );
   }
+
+  @Action(UpdateComment)
+  updateComment(
+    ctx: StateContext<AppInitial>,
+    { payload }: any
+  ): Observable<Comments> {
+    const state = ctx.getState();
+    ctx.patchState({
+      commentState: {
+        isError: false,
+        isLoading: true,
+        isSuccess: false,
+      },
+    });
+    return this.commentService.updateComment(payload).pipe(
+      tap(
+        (comment: Comments) => {
+          console.log(comment);
+
+          ctx.patchState({
+            comments: state.comments.filter((element) => {
+              element.id === comment.id ? comment : element;
+            }),
+            commentState: {
+              isError: false,
+              isLoading: false,
+              isSuccess: true,
+            },
+          });
+        },
+        (error) => {
+          ctx.patchState({
+            commentState: {
+              isError: true,
+              isLoading: false,
+              isSuccess: false,
+            },
+          });
+        }
+      )
+    );
+  }
+
   @Action(GetComments)
   getComment(ctx: StateContext<AppInitial>): Observable<Comments[]> {
     ctx.patchState({

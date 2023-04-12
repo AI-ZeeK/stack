@@ -15,6 +15,7 @@ import {
   Comments,
   CreateComment,
   DeleteComment,
+  UpdateComment,
 } from 'src/app/store/comments.action';
 
 @Component({
@@ -29,7 +30,10 @@ export class PostItemComponent {
   faComments = faComments;
   faDeleteLeft = faDeleteLeft;
   faEdit = faEdit;
-  comment!: string;
+  comment: string = '';
+  commentId?: string;
+  isEdit: boolean = false;
+
   isCommentBoxOpen: boolean = false;
   @Select(AuthState.getUser) user$!: Observable<User>;
   @Select(AuthState.getPostAuthors) PostAuthors$!: Observable<any>;
@@ -51,17 +55,42 @@ export class PostItemComponent {
     this.store.dispatch(new DeleteComment(id));
   }
 
+  handleEdit($event: Comments) {
+    console.log($event);
+    this.isEdit = true;
+    this.comment = $event.comment;
+    this.commentId = $event.id;
+  }
+
   handleOpenCommentBox() {
     this.isCommentBoxOpen = !this.isCommentBoxOpen;
   }
   handleCommentSubmit(postId: string | undefined) {
-    console.log(postId, this.comment);
-    this.store.dispatch(
-      new CreateComment({
-        postId,
-        comment: this.comment,
-      })
-    );
-    this.comment = '';
+    if (!this.isEdit) {
+      if (this.comment === '') return;
+
+      console.log(postId, 24);
+      this.store.dispatch(
+        new CreateComment({
+          postId,
+          comment: this.comment,
+        })
+      );
+      this.comment = '';
+    }
+
+    if (this.isEdit) {
+      if (this.comment === '') return;
+      console.log(postId, 12, this.commentId);
+      this.store.dispatch(
+        new UpdateComment({
+          id: this.commentId,
+          comment: this.comment,
+        })
+      );
+      UpdateComment;
+      this.isEdit = false;
+      this.comment = '';
+    }
   }
 }

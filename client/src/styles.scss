@@ -340,7 +340,7 @@ h3 {
 
 .form-box {
   border: 1px solid #888;
-  width: 100%
+  width: 100%;
   /* border-radius: 8px; */
 }
 
@@ -380,6 +380,9 @@ h3 {
   width: 100%;
   display: none;
 }
+.comment-block {
+  width: 100%;
+}
 .comment-block .comment-box.active {
   display: block;
 }
@@ -417,7 +420,7 @@ h3 {
 }
 
 .comment-lists {
-  padding: 0.2rem;
+  padding: 0.1rem 0.2rem;
   display: grid;
   grid-template-columns: 4fr 1fr;
   justify-content: space-between;
@@ -432,6 +435,7 @@ h3 {
     align-items: center;
     justify-content: flex-start;
     padding-left: 0.2rem;
+    font-size: 0.8rem;
   }
   .icon {
     padding: 0.4rem 0.2rem;
