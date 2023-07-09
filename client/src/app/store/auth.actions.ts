@@ -123,13 +123,20 @@ export class AuthState {
     });
 
     return this.authService.signInUser(payload).pipe(
-      tap((user: User) => {
-        dispatch(new SetUsers(user));
-        patchState({
-          userState: { isLoading: false, isSuccess: false, isError: false },
-        });
-        user && this.router.navigate(['']);
-      })
+      tap(
+        (user: User) => {
+          dispatch(new SetUsers(user));
+          patchState({
+            userState: { isLoading: false, isSuccess: false, isError: false },
+          });
+          user && this.router.navigate(['']);
+        },
+        () => {
+          patchState({
+            userState: { isLoading: false, isSuccess: false, isError: false },
+          });
+        }
+      )
     );
   }
   // @Action(GetUser)
