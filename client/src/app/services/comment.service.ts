@@ -8,7 +8,8 @@ import { Comments } from '../store/comments.action';
   providedIn: 'root',
 })
 export class CommentService {
-  private apiUrl = 'http://localhost:8000/comment';
+//   private apiUrl = 'http://localhost:8000/comment';
+  private apiUrl = 'https://stack-8xlr.onrender.com/comment';
   constructor(private http: HttpClient) {}
 
   deletePostComment(postId: string | undefined): any {

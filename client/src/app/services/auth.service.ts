@@ -12,7 +12,8 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/user';
+//   private apiUrl = 'http://localhost:8000/user';
+  private apiUrl = 'https://stack-8xlr.onrender.com/user';
   constructor(private http: HttpClient) {}
   signInUser(authData: any): Observable<any> {
     return this.http.post(this.apiUrl, authData);

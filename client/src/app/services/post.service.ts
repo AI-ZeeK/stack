@@ -9,7 +9,8 @@ import { User, Post } from '../store/auth.actions';
 export class PostService {
   // user: User = JSON.parse(`${this.getData('access-token')}`);
 
-  private apiUrl = 'http://localhost:8000/post';
+//   private apiUrl = 'http://localhost:8000/post';
+  private apiUrl = 'https://stack-8xlr.onrender.com/post';
   constructor(private http: HttpClient) {}
   getTwits(): Observable<any> {
     return this.http.get(this.apiUrl);
