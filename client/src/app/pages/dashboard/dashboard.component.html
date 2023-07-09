@@ -14,8 +14,8 @@
     <ng-container *ngIf="posts$ | async as posts">
       <ng-container *ngIf="postsState$ | async as postsState">
         <ng-container *ngIf="postsState.isLoading"
-          ><h3>Loading ...</h3></ng-container
-        >
+          ><app-spinner></app-spinner
+        ></ng-container>
         <ng-container *ngIf="postsState.isError && posts.length < 1">
           <h3>Failed in fetching Twits ...</h3>
         </ng-container>

@@ -1,4 +1,9 @@
 <app-header></app-header>
+<ng-container *ngIf="userState$ | async as userState">
+  <ng-container *ngIf="userState.isLoading">
+    <app-spinner></app-spinner>
+  </ng-container>
+</ng-container>
 <div class="container">
   <section class="heading">
     <h1>

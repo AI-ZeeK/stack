@@ -4,7 +4,12 @@ import { faUserAlt } from '@fortawesome/free-solid-svg-icons';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
-import { AuthState, SignInUser, User } from 'src/app/store/auth.actions';
+import {
+  AuthState,
+  SignInUser,
+  User,
+  QueryState,
+} from 'src/app/store/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -18,6 +23,7 @@ export class AuthComponent {
 
   userN = this.store.select((state) => state.users.user);
   @Select(AuthState.getUser) user$!: Observable<User>;
+  @Select(AuthState.getUserState) userState$!: Observable<QueryState>;
 
   constructor(
     private authService: AuthService,

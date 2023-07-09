@@ -68,6 +68,11 @@ h3 {
   margin-bottom: 60px;
   color: #fff;
   gap: 8rem;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #00000099;
+  backdrop-filter: blur(6px);
 }
 .content-box {
   display: grid;

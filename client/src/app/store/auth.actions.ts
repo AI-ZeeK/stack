@@ -106,7 +106,7 @@ export class AuthState {
     return state.user;
   }
   @Selector()
-  static getUserState(state: any) {
+  static getUserState(state: any): QueryState {
     return state.userState;
   }
   @Selector()
@@ -115,12 +115,19 @@ export class AuthState {
   }
   @Action(SignInUser)
   signInUser(
-    ctx: StateContext<AppInitial>,
+    { patchState, dispatch }: StateContext<AppInitial>,
     { payload }: any
   ): Observable<User> {
+    patchState({
+      userState: { isLoading: true, isSuccess: false, isError: false },
+    });
+
     return this.authService.signInUser(payload).pipe(
       tap((user: User) => {
-        ctx.dispatch(new SetUsers(user));
+        dispatch(new SetUsers(user));
+        patchState({
+          userState: { isLoading: false, isSuccess: false, isError: false },
+        });
         user && this.router.navigate(['']);
       })
     );

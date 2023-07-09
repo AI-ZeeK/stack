@@ -18,6 +18,7 @@ import { AuthService } from './services/auth.service';
 import { PostService } from './services/post.service';
 import { CommentBoxComponent } from './components/comment-box/comment-box.component';
 import { CommentState } from './store/comments.action';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { CommentState } from './store/comments.action';
     HeaderComponent,
     PostFormComponent,
     CommentBoxComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
