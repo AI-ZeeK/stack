@@ -1,19 +1,20 @@
 <ng-container *ngIf="PostAuthors$ | async as PostAuthors">
   <div class="goal">
-    <div class="goal-date">
-      {{ post.createdAt | date : "dd/MM/yyyy hh:mm:ss a" }}
+    <div class="head-box">
+      <ng-container *ngFor="let PostAuthor of PostAuthors">
+        <div *ngIf="PostAuthor.id == post.authorId" class="profile">
+          <div class="profile-img">{{ PostAuthor.name.slice(0, 1) }}</div>
+          <h4 class="goal-name" style="text-transform: uppercase">
+            {{ PostAuthor.name }}
+          </h4>
+        </div>
+      </ng-container>
+      <div class="goal-date">
+        {{ post.createdAt | date : "dd/MM/yyyy hh:mm:ss a" }}
+      </div>
     </div>
-    <ng-container *ngFor="let PostAuthor of PostAuthors">
-      <h2
-        *ngIf="PostAuthor.id == post.authorId"
-        class="goal-text"
-        style="text-transform: uppercase"
-      >
-        {{ PostAuthor.name }}
-      </h2>
-    </ng-container>
     <h2 class="goal-text">{{ post.title }}</h2>
-    <small class="goal-text">{{ post.content }}</small>
+    <small class="goal-text-desc">{{ post.content }}</small>
     <button class="close" (click)="deletePost(post.id)">
       <ng-container *ngIf="user$ | async as user">
         <fa-icon
@@ -24,7 +25,7 @@
       </ng-container>
     </button>
     <div class="line-through"></div>
-    <div class="comment-block flex_col_center gap_102">
+    <div class="comment-block flex_col_center">
       <div class="comment-icon-box">
         <!-- <TfiComments className="icon" onClick={handeCommentOpen} /> -->
         <fa-icon
@@ -38,22 +39,17 @@
       className={`${
         isCommentOpen ? "comment-box active" : "comment-box"
       }`} -->
-      <div
-        [ngClass]="{
-          'comment-box active': isCommentBoxOpen,
-          'comment-box': !isCommentBoxOpen
-        }"
-      >
+      <div class=" comment-box {{ isCommentBoxOpen ? 'active' : '' }}">
         <ul>
           <ng-container *ngIf="comments$ | async as comments">
             <ng-container *ngFor="let comment of comments">
               <li *ngIf="comment.postId === post.id" class="comment-lists">
                 <span class="comment-text"> {{ comment.comment }} </span>
-                <div class="comment-icon-box">
+                <div class="icon-box">
                   <ng-container *ngIf="user$ | async as user">
                     <fa-icon
-                      class="icon edit"
-                      style="font-size: 1rem"
+                      class="icon"
+                      style="font-size: 1.2rem"
                       [icon]="faEdit"
                       *ngIf="user.id === comment.commentorId"
                       (click)="handleEdit(comment)"
@@ -61,10 +57,10 @@
                   </ng-container>
                   <ng-container *ngIf="user$ | async as user">
                     <fa-icon
-                      class="icon delete"
-                      style="font-size: 1rem"
-                      [icon]="faDeleteLeft"
-                      (dblclick)="deleteComment(comment.id)"
+                      class="icon"
+                      style="font-size: 1.2rem"
+                      [icon]="faTrash"
+                      (click)="deleteComment(comment.id)"
                       *ngIf="
                         user.id === post.authorId ||
                         user.id === comment.commentorId

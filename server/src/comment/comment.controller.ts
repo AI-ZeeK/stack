@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   HttpException,
   HttpStatus,
@@ -49,12 +50,16 @@ export class CommentController {
   @UseGuards(UserGuard)
   @Delete('post/:postId')
   async deletePostComment(@Param('postId') postId: string): Promise<object> {
-    const allComments = await this.getAllComments();
-    allComments.map((element) => {
-      element.postId === postId
-        ? this.commentService.deleteComment({ id: element?.id })
-        : null;
+    console.log(123);
+    // const allComments = await this.getAllComments();
+    const myComments = await this.commentService.deletePostComments({
+      id: postId,
     });
+    // allComments.map((element) => {
+    //   element.postId === postId
+    //     ? this.commentService.deleteComment({ id: element?.id })
+    //     : null;
+    // });
     return { message: 'Deleted' };
   }
   @UseGuards(UserGuard)

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Comments, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -21,6 +22,11 @@ export class CommentService {
     where: Prisma.CommentsWhereUniqueInput,
   ): Promise<Comments> {
     return this.prisma.comments.delete({
+      where,
+    });
+  }
+  async deletePostComments(where: Prisma.CommentsWhereInput): Promise<any> {
+    return this.prisma.comments.deleteMany({
       where,
     });
   }

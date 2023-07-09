@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import {
   faClose,
   faComments,
-  faDeleteLeft,
+  faTrash,
   faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 import { Select, Store } from '@ngxs/store';
@@ -28,7 +28,7 @@ export class PostItemComponent {
   @Input() postAuthor!: User;
   faClose = faClose;
   faComments = faComments;
-  faDeleteLeft = faDeleteLeft;
+  faTrash = faTrash;
   faEdit = faEdit;
   comment: string = '';
   commentId?: string;
